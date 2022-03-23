@@ -1,0 +1,29 @@
+---
+- name: confirming python version
+  win_command: python --version
+  register: pythonversion
+
+- name: python version
+  debug:
+    msg: "{{ pythonversion }}"
+
+
+- name: importing intake_tags.csv file to update tags in migration factory
+  win_command: "python 0-Import-tags.py --Intakeform {{file_name}} --userName {{username}} --password {{password}}"
+  args:
+    chdir: "{{ dest_path }}"
+  register: output
+
+- name: output of importing intake_tags.csv file
+  debug:
+    msg: "{{ output }}"
+
+- name: Remove a intake_tags.csv file, if present
+  win_file:
+    path: "{{ dest_path }}/{{file_name}}"
+    state: absent
+  register: csv_delete_output
+
+- name: output of deleting csv file
+  debug:
+    msg: "{{ csv_delete_output }}"

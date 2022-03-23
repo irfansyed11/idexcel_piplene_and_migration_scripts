@@ -1,0 +1,11 @@
+---
+- hosts: win-hosts
+  gather_facts: false
+  ignore_errors: true
+  roles:
+    - { role: ../roles/copy-exe, file_name: [ AWSDiscoveryAgentInstaller.exe ] }
+  tasks:
+  - name: Block for installion in windows
+    block:
+    - include_role:
+        name: ../roles/installation-windows 

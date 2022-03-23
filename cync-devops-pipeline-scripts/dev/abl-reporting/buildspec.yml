@@ -1,0 +1,45 @@
+version: 0.2 
+ 
+phases: 
+  install: 
+    runtime-versions: 
+        ruby: 2.6
+    commands: 
+      - echo do something
+      - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+      - apt-get update 
+  pre_build: 
+    commands: 
+      - echo Logging in to Amazon ECR..
+  build: 
+    commands: 
+      - echo Build started on `date` 
+  post_build: 
+    commands: 
+      - echo Build completed on `date`
+      - timestamp=$(date -u '+%Y-%m-%d_%H-%M-%S_%Z')
+      - srcVer=$CODEBUILD_SOURCE_VERSION
+      - echo $CODEBUILD_SOURCE_VERSION
+      - echo "printing the branch name $GITHUB_BRANCH_NAME"
+      - indx=$(echo $CODEBUILD_SOURCE_VERSION | grep -q ^arn ; echo $?)
+      - |
+        if [ "$indx" -eq 0 ]; then
+          srcVer=$CODEBUILD_RESOLVED_SOURCE_VERSION
+        fi
+      - artifactversion=$(echo cync-abl-reporting-$GITHUB_BRANCH_NAME.$srcVer.$timestamp)
+      - echo $artifactversion
+      - touch version.txt
+      - echo "$artifactversion" >> version.html
+
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION) 
+      - echo Building the Docker image...   
+      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG . 
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG 
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG 
+      #- #echo Sync code analysis reports to S3 
+      #- #aws s3 sync target/reports/ s3://$STATIC_CODE_REPORTS_BUCKET/term-loan-service/ 
+      #- aws s3api put-object --bucket dev-finance-microservice --key artifacts/financial-analysis-0.0.1-SNAPSHOT.jar --body /target/financial-analysis-0.0.1-SNAPSHOT.jar --tagging 'VersionNo=1&DeploymentIdentifier=CURRENT' 
+#artifacts: 
+ # files: 
+    #- version.html 
+  #discard-paths: yes 

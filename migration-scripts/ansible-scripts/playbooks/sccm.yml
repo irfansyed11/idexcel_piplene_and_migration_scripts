@@ -1,0 +1,10 @@
+---
+- hosts: win-hosts
+  gather_facts: false
+  roles:
+    - { role: ../roles/copy-exe, file_name: [ Client_Center_for_Configuration_Manager_v1.0.2.11.exe, test.bat ] }
+  tasks:
+  - name: Block for installion in windows
+    block:
+    - include_role:
+         name: ../roles/installation-windows 

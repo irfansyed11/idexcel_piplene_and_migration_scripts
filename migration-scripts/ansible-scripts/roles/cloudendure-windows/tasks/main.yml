@@ -1,0 +1,28 @@
+---
+- name: Wait for system to become reachable over WinRM
+  wait_for_connection:
+    timeout: 90
+- name: Check if a CloudEndure service is installed
+  win_service:
+    name: CloudEndureService
+  register: service_info
+- name: CloudEndure service availability status
+  debug:
+    msg: "{{service_info}}"
+- name: downloading cloudendure on windows
+  win_get_url:
+    url: https://console.cloudendure.com/installer_win.exe
+    dest: "{{ dest_path }}/installer_win.exe"
+  when: service_info.exists == false
+
+- name: installing cloudendure on windows
+  win_command: installer_win.exe -t "{{ token }}" --no-prompt
+  args:
+    chdir: "{{ dest_path }}"
+  when: service_info.exists == false
+  register: output
+
+- name: output of installing cloudendure on windows
+  debug:
+    msg: "{{ output }}"
+  when: service_info.exists == false

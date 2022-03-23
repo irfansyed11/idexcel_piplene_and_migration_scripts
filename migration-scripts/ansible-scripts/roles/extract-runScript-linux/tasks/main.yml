@@ -1,0 +1,22 @@
+---
+- name: Extract the tar file
+  unarchive:
+    src: "{{ dest_path }}/{{ item }}"
+    dest: "{{ dest_path }}"
+    remote_src: yes
+  with_items: "{{ file_name }}"
+
+- name: delete the tar.gz file
+  file:
+    path: "{{ dest_path }}/{{ item }}"
+    state: absent
+  with_items: "{{ file_name }}"
+
+- name: Running  script
+  script: "{{ linux_scripts_path }}/{{ sh_script }}"
+  become: true
+  register: myscript_output
+
+- name: output of script
+  debug:
+    msg: "{{ myscript_output }}"

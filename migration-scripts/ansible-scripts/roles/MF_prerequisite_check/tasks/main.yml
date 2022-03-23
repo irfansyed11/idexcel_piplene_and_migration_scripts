@@ -1,0 +1,19 @@
+---
+- name: confirming python version
+  win_command: python --version
+  register: pythonversion
+
+- name: python version
+  debug:
+    msg: "{{ pythonversion }}"
+
+
+- name: running python script for cheking prerequisites in migration factory
+  win_command: "python 0-Prerequisites-checks.py --Waveid {{waveid}} --CEServerIP {{CEServerIP}} --userName {{username}} --password {{password}} --domainUserName {{ DomainUserName }} --domainPassword {{ DomainPassword }}"
+  args:
+    chdir: "{{ dest_path }}"
+  register: output
+
+- name: output of python script
+  debug:
+    msg: "{{ output }}"

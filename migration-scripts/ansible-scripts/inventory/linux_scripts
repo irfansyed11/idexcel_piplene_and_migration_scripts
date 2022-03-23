@@ -1,0 +1,12 @@
+[ubuntu]
+
+
+[ubuntu:vars]
+ansible_user=
+ansible_connection=ssh
+ansible_password=
+exe_files_path=/home/ubuntu/cloudmigration-ansible/exefiles
+dest_path=/home/
+linux_scripts_path=/home/ubuntu/cloudmigration-ansible/linux-scripts
+token=$CloudEndure_Token
+sh_script=custom_linux_script.sh

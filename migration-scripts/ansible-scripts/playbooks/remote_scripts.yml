@@ -1,0 +1,19 @@
+---
+- hosts: ubuntu
+  gather_facts: false
+  ignore_errors: true
+  ignore_unreachable: true
+  tasks:
+  - name: Block for installion in Linux
+    block:
+    - include_role:
+        name: ../roles/installation-linux
+- hosts: win-hosts
+  #gather_facts: false
+  #ignore_errors: true
+  #ignore_unreachable: true
+  tasks:
+  - name: Block for installion in windows
+    block:
+    - include_role:
+        name: ../roles/installation-windows

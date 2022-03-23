@@ -1,0 +1,9 @@
+---
+- hosts: win-hosts
+  gather_facts: false
+  ignore_errors: true
+  tasks:
+  - name: Block for running script
+    block:
+    - include_role:
+          name: ../roles/MF_prerequisite_check

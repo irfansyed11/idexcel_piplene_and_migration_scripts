@@ -1,0 +1,19 @@
+---
+- hosts: ubuntu
+  gather_facts: false
+  ignore_errors: true
+  ignore_unreachable: true
+  tasks:
+  - name: Block for cloudendure installion in Linuxi
+    block:
+    - include_role:
+        name: ../roles/cloudendure-linux
+- hosts: win-hosts
+  #gather_facts: false
+  #ignore_errors: true
+  #ignore_unreachable: true
+  tasks:
+  - name: Block for cloudendure installion in windows
+    block:
+    - include_role:
+        name: ../roles/cloudendure-windows

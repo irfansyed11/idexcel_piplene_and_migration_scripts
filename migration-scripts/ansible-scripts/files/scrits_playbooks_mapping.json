@@ -1,0 +1,42 @@
+{
+	"custom_script_windows":{
+		"playbook": "remote_scripts.yml",
+		"script": "custom_windows_script.ps1"
+	},
+	"AWS_DiscoveryAgent_windows":{
+                "playbook": "AWSDiscoveryAgentInstaller-windows.yml",
+                "script": "AWSDiscoveryAgentInstaller.ps1"
+        },
+	"sccm":{
+                "playbook": "sccm.yml",
+                "script": "jenkin-ps-install.ps1"
+        },
+	"trendmicro_windows":{
+                "playbook": "remote_scripts.yml",
+                "script": "AgentDeploymentScript.ps1"
+        },
+        "trendmicro_uninstall_windows":{
+                "playbook": "remote_scripts.yml",
+                "script": "trendmicro_uninstall.ps1"
+        },
+        "WinRM_Encryption":{
+                "playbook": "remote_scripts.yml",
+                "script": "enabling_winrm_encryption.ps1"
+        },
+        "AWS_DiscoveryAgent_linux":{
+                "playbook": "AWSDiscoveryAgentInstaller-linux.yml",
+                "script": "AWSDiscoveryAgentInstaller.sh"
+        },
+        "trendmicro_linux":{
+                "playbook": "remote_scripts.yml",
+                "script": "AgentDeploymentScript.sh"
+        },
+        "custom_script_linux":{
+                "playbook": "remote_scripts.yml",
+                "script": "custom_linux_script.sh"
+        }
+
+
+
+
+}

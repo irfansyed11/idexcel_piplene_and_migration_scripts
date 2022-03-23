@@ -1,0 +1,13 @@
+---
+- name: Wait for system to become reachable over WinRM
+  wait_for_connection:
+    timeout: 90
+
+- script: "{{windows_scripts_path}}/{{psi_script}}"
+  args:
+    creates: /file.ps1
+  register: output
+
+- name: debug
+  debug:
+    msg: "{{output}}"

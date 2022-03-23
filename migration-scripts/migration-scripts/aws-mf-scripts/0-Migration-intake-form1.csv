@@ -1,0 +1,3 @@
+wave_id,app_name,cloudendure_projectname,aws_accountid,server_name,server_os,server_os_version,server_fqdn,server_tier,server_environment,subnet_IDs,securitygroup_IDs,subnet_IDs_test,securitygroup_IDs_test,instanceType,tenancy
+10,APP2,project3,286605220849,IDXWVM1,windows,windows server 2012 R2,IDXWVM1.idexcel.external,web,dev,subnet-0435178fb98691108,sg-03f0bc0e17775207f,subnet-0435178fb98691108,sg-03f0bc0e17775207f,c5.xlarge,Shared
+10,APP2,project3,286605220849,idxvmub1,linux,Ubuntu,idxvmub1,web,dev,subnet-0435178fb98691108,sg-03f0bc0e17775207f,subnet-0435178fb98691108,sg-03f0bc0e17775207f,c5.xlarge,Shared

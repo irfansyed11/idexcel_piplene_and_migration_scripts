@@ -1,0 +1,26 @@
+---
+- name: confirming python version
+  win_command: python --version
+  register: pythonversion
+
+- name: python version
+  debug:
+    msg: "{{ pythonversion }}"
+
+
+- name: running python script for fetching IPs from migration factory
+  win_command: "python 4-Get-instance-IP.py --Waveid {{ waveid }} --userName {{ username }}  --password {{ password }} --apiToken {{ token }} --CloudEndureProjectName {{ projectname }} --accessKeyId {{ accesskey }} --secretAccessKey {{ secretkey }}"
+  args:
+    chdir: "{{ dest_path }}"
+  register: output
+
+- name: output of python script
+  debug:
+    msg: "{{ output }}"
+
+- name: fetching ips file from execution server
+  fetch:
+    src: "{{ dest_path }}/Wave{{ waveid }}-{{ projectname }}-IPs.csv"
+    dest: "{{ workspace_path }}/Wave{{ waveid }}-{{ projectname }}-IPs.csv"
+    fail_on_missing: yes
+    flat: yes

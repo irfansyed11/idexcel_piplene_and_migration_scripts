@@ -1,0 +1,13 @@
+---
+- name: Wait for system to become reachable over WinRM
+  wait_for_connection:
+    timeout: 90
+- copy:
+    src: "{{ exe_files_path}}/{{item}}"
+    dest: "{{ dest_path }}/{{item}}"
+  register: output
+  with_items: "{{ file_name }}"
+
+- name: debug
+  debug:
+    msg: "{{output}}"

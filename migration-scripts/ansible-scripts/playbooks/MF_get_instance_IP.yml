@@ -1,0 +1,9 @@
+---
+- hosts: win-hosts
+  gather_facts: false
+  ignore_errors: true
+  tasks:
+  - name: Block calling role
+    block:
+    - include_role:
+          name: ../roles/MF_get_instance_IP

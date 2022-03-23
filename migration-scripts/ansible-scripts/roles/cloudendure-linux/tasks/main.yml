@@ -1,0 +1,51 @@
+---
+- name: Check all port numbers are accessible from the current host
+  wait_for:
+    port: "{{ item }}"
+    state: started         # Port should be open
+    delay: 0               # No wait before first check (sec)
+    timeout: 3             # Stop checking after timeout (sec)
+  with_items:
+    - 22
+
+- name: "check cloudendure folder having any files"
+  find: paths=/var/lib/cloudendure file_type=file recurse=yes
+  register: available_files
+- name: "cloudendure installing or not"    
+  debug:
+    msg: "installing Cloud Endure agent"
+  when: available_files.examined == 0
+- name: "cloudendure installing or not"
+  debug:
+    msg: "Not installing Cloud Endure agent"
+  when: available_files.examined > 0
+
+- name: downloading cloudendure on ubuntu
+  get_url:
+    url: https://console.cloudendure.com/installer_linux.py
+    dest: "{{ dest_path }}/installer_linux.py"
+  when: available_files.examined == 0
+- shell: which python
+  register: python_bin_path
+  ignore_errors: true
+- shell: which python3
+  register: python3_bin_path
+  ignore_errors: true
+- debug:
+    msg: "{{ python_bin_path.stdout if python_bin_path.stdout != '' else python3_bin_path.stdout }}"
+  register: python
+- name: installing cloudendure on ubuntu
+  command: sudo "{{python.msg}}" ./installer_linux.py -t {{ token }} --no-prompt
+  args:
+    chdir: "{{ dest_path }}"
+  when: available_files.examined == 0
+  register: output 
+
+- name: output of installing cloudendure on ubuntu
+  debug:
+    msg: "{{ output }}"
+  when: available_files.examined == 0
+
+- name: giving read access to /var/lib/cloudendure directory
+  command: sudo chmod +r /var/lib/cloudendure
+  when: available_files.examined == 0

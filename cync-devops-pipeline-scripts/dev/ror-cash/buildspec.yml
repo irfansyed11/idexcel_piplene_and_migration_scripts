@@ -1,0 +1,28 @@
+version: 0.2 
+env: 
+  variables: 
+    artifactname: "$APP_PREFIX" 
+phases: 
+  install: 
+    commands: 
+      - echo `pwd` 
+      - aws s3 cp s3://$DEVOPS_SCRIPTS_BUCKET/$SCRIPT_S3_PATH/buildspec_install.sh .
+      - chmod +x buildspec_install.sh && ./buildspec_install.sh 
+  pre_build: 
+    commands: 
+  build: 
+    commands: 
+      - echo Build started on `date`
+      - echo `pwd`
+      - aws s3 cp s3://$DEVOPS_SCRIPTS_BUCKET/$SCRIPT_S3_PATH/buildspec_build.sh .
+      - chmod +x buildspec_build.sh && ./buildspec_build.sh
+  post_build: 
+    commands: 
+      - echo Build completed on `date` 
+artifacts: 
+  files: 
+      - version.html 
+      - appspec.yml 
+      - ansible_deploy.sh    
+      - env.txt 
+  discard-paths: yes 

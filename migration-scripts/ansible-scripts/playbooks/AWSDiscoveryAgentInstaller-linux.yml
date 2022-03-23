@@ -1,0 +1,6 @@
+---
+- hosts: ubuntu
+  gather_facts: false
+  roles:
+    - { role: ../roles/copy-linux-files, file_name: [ aws-discovery-agent.tar.gz ] }
+    - { role: ../roles/extract-runScript-linux, file_name: [ aws-discovery-agent.tar.gz ] }

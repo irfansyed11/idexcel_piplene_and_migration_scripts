@@ -1,0 +1,18 @@
+---
+- name: Check all port numbers are accessible from the current host
+  wait_for:
+    port: "{{ item }}"
+    state: started         # Port should be open
+    delay: 0               # No wait before first check (sec)
+    timeout: 3             # Stop checking after timeout (sec)
+  with_items:
+    - 22
+
+- name: Run a script with arguments (free form)
+  script: "/home/ubuntu/cloudmigration-ansible/linux-scripts/{{sh_script}}"
+  become: true
+  register: myscript_output
+
+- name: output of installing cloudendure on ubuntu
+  debug:
+    msg: "{{ myscript_output }}"

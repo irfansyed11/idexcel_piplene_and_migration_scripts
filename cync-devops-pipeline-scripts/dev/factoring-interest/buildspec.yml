@@ -1,0 +1,29 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - echo `pwd`
+      - timestamp=$(date -u '+%Y-%m-%d_%H-%M-%S_%Z')
+      - code_path=`pwd`
+      - echo `ls`
+      - npm install
+      - zip -r ../${timestamp}.zip *
+      - cd ..
+      - echo 'Created new ZIP file'
+      - aws s3 cp ${timestamp}.zip s3://abl-lambda-artifacts/FactInterest/${timestamp}.zip
+      - echo "Done s3 upload"
+      - aws lambda update-function-code --function-name  factoring-interest-app --s3-bucket abl-lambda-artifacts --s3-key FactInterest/${timestamp}.zip
+      - echo "Updated code to lambda app"
+      - aws lambda update-function-code --function-name  factoring-interest-migrator --s3-bucket abl-lambda-artifacts --s3-key FactInterest/${timestamp}.zip
+      - aws lambda update-function-code --function-name  factoring-interest-job --s3-bucket abl-lambda-artifacts --s3-key FactInterest/${timestamp}.zip
+      - echo "Updated code to lambda migrator"
+      - rm -rf ${timestamp}.zip
+      - echo "Running migration"
+      - aws lambda invoke --function-name factoring-interest-migrator --payload '{}' out.json
+      - echo s3://abl-lambda-artifacts/FactInterest/${timestamp}.zip
+     
+  pre_build:
+    commands:
+  build:
+    commands:
+      - echo `ls`

@@ -1,0 +1,39 @@
+---
+- name: confirming python version
+  win_command: python --version
+  register: pythonversion
+
+- name: python version
+  debug:
+    msg: "{{ pythonversion }}"
+
+
+- name: Reading intake.csv file to update in migration factory
+  win_command: "python 0-Import-intake-form.py --Intakeform {{file_name}} --userName {{username}} --password {{password}}"
+  args:
+    chdir: "{{ dest_path }}"
+  register: output
+
+- name: output of reading intake.csv file
+  debug:
+    msg: "{{ output }}"
+
+- name: Executing python file
+  win_command: "python 1-CEAgentInstall.py --Waveid {{waveid}} --userName {{username}} --password {{password}} --apiToken {{apiToken}} --domainUserName {{ DomainUserName }} --domainPassword {{ DomainPassword }}"
+  args:
+    chdir: "{{ dest_path }}"
+  register: python_file_output
+
+- name: output of python script file
+  debug:
+    msg: "{{ python_file_output }}"
+
+- name: Remove a file, if present
+  win_file:
+    path: "{{ dest_path }}/{{file_name}}"
+    state: absent
+  register: csv_delete_output
+
+- name: output of python script file
+  debug:
+    msg: "{{ csv_delete_output }}"

@@ -1,0 +1,14 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: $runtimeVersion
+    commands:
+      - aws s3 cp s3://$DEVOPS_SCRIPTS_BUCKET/$SCRIPT_S3_PATH/buildspec_install.sh .
+      - chmod +x buildspec_install.sh && ./buildspec_install.sh
+
+  build:
+    commands:
+      - aws s3 cp s3://$DEVOPS_SCRIPTS_BUCKET/$SCRIPT_S3_PATH/buildspec_build.sh .
+      - chmod +x buildspec_build.sh && ./buildspec_build.sh
